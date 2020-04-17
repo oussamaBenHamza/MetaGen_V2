@@ -101,7 +101,6 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 			var principalCardinlaty = this.getView().byId("cardinal").getSelectedKey();
 			var secondaryEntity = this.getView().byId("secSetName").getValue();
 			var secondaryCardinlaty = this.getView().byId("cardinal2").getSelectedKey();
-
 			if (sAssName === "") {
 				MessageToast.show("Enter Association name.");
 				this.getView().byId("assName").setValueState("Error");
@@ -187,14 +186,12 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 					};
 					var exist = allAssociationsName.findIndex(element => element.text === sAssName);
 					if (exist < 0) {
-						this.getView().byId("navPropsTableTbar").setEnabled(true);
 						this.getView().byId("Tree").getModel().getData()[0].nodes[1].nodes.push(oAssociation);
 						this.getView().byId("Tree").getModel().refresh();
 						that.saveProject.enableNavigPropsCreation.apply(that);
 						return true;
 
 					} else {
-						this.getView().byId("navPropsTableTbar").setEnabled(true);
 						this.getView().byId("Tree").getModel().getData()[0].nodes[1].nodes[exist] = oAssociation;
 						this.getView().byId("Tree").getModel().refresh();
 						that.saveProject.enableNavigPropsCreation.apply(that);
@@ -232,7 +229,6 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 		},
 		enableNavigPropsCreation: function () {
 			this.bCreateNavigation = true;
-			this.getView().byId("navPropsTableTbar").setEnabled(true);
 			this.getView().byId("navPropsTable").getItems().forEach(function (oItem) {
 				oItem.getCells().forEach(function (oCell) {
 					oCell.setEnabled(true);

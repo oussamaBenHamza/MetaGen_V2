@@ -36,8 +36,8 @@ sap.ui.define([
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
 		},
-		getAllEntitiesNames: function (oController) {
-			var oServiceTree = oController.getView().byId("Tree");
+		getAllEntities : function(){
+			return this.getView().byId("Tree").getModel().getData()[0].nodes[0].nodes;
 		}
 	});
 });

@@ -15,9 +15,10 @@ sap.ui.define([
 	"./modules/upDateCurrentProject",
 	"./modules/propsTableRendering",
 	"./modules/createAssociation",
+	"./modules/rendering",
 	"sap/m/MessageBox"
 ], function (Controller, JSONModel, MessageToast, Dialog, Button, Label, ButtonType, Menu, MenuItem, checkOdata, generateProject,
-	saveProject, errorManager, upDateCurrentProject, propsTableRendering, createAssociation, MessageBox) {
+	saveProject, errorManager, upDateCurrentProject, propsTableRendering, createAssociation, rendering, MessageBox) {
 	"use strict";
 
 	return Controller.extend("metaGen.obh.MetaGen.controller.CreateEntities", {
@@ -47,6 +48,13 @@ sap.ui.define([
 				enabled: false // Pas cliquable par défaut
 			});
 			this.getView().setModel(oGoAssociation, "onCreateAssEnabled");
+
+			var oVisibleWizard = new sap.ui.model.json.JSONModel({
+				createEntities: false,
+				createAssociation: false,
+			});
+			this.getView().setModel(oVisibleWizard, "creationWizard");
+
 			this.createdItems = 1;
 			this.navPropNumber = 2;
 		},
@@ -73,30 +81,21 @@ sap.ui.define([
 				upDateCurrentProject.upDateProject.apply(that, [oEvent]);
 			});
 			this.byId("Tree").attachBrowserEvent("contextmenu", function (oEvent) {
-				upDateCurrentProject.manageProject.apply(that, [oEvent]);
-			});
-			this.byId("checkBt").attachBrowserEvent("mouseover", function (oEvent) {
-				that.byId("checkBt").setText("Check")
-			});
-			this.byId("checkBt").attachBrowserEvent("mouseout", function (oEvent) {
-				that.byId("checkBt").setText("")
-			});
-			var selectedItem = this.byId("Tree").getSelectedItem();
-			if (selectedItem) {
-				selectedItem.oncontextmenu = function (oEvt) {
-					if (oEvt.srcControl.getProperty("title") === "conso") {
-						that.byId("Tree").setContextMenu(new Menu({
-							items: [
-								new MenuItem({
-									text: "Conso",
-									press: that.onUpdate
-								})
-							]
-						}));
+				var selectedItem;
+				var target = oEvent.target.innerText;
+				var aTreeItems = this.getItems();
+				aTreeItems.forEach(function (oItem) {
+					if (oItem.getProperty("title") === target) {
+						selectedItem = oItem;
 					}
-				};
-			}
-
+				});
+				this.setSelectedItem(selectedItem);
+				upDateCurrentProject.manageProject.apply(that, [oEvent]);
+				// alert(oEvent.target.innerText);
+			});
+			rendering.toggleTextonMouseOver.apply(this, ["checkBt", "Check"]);
+			rendering.toggleTextonMouseOver.apply(this, ["generateBt", "Generate"]);
+			rendering.toggleTextonMouseOver.apply(this, ["saveBt", "Save"]);
 		},
 		getTargetFromTree: function (selectedTarget) {
 			var projectName = this.getView().byId("SerName").getValue();
@@ -266,36 +265,34 @@ sap.ui.define([
 			oSplitContainer.setShowSecondaryContent(!oSplitContainer.getShowSecondaryContent());
 		},
 		onPropertyNameChange: function (oEvt) {
-			/*
-						if (!this.oPropertiesTable) {
-							this.oPropertiesTable = this.getParent().getParent();
-						}
-						var aItems = this.oPropertiesTable.getItems();
-						var nbrOfItems = aItems.length;
-						if (this.oPropertiesTable.getItems().length === 1) {
-							this.sValue = this.oPropertiesTable.getItems()[0].getCells()[0].getValue();
-						} else if (this.oPropertiesTable.getItems().length > 1) {
-							var beforeLastItem = aItems[nbrOfItems - 2];
-							this.sValue = beforeLastItem.getCells()[0].getValue();
 
-						}
+			if (!this.oPropertiesTable) {
+				this.oPropertiesTable = this.getParent().getParent();
+			}
+			var aItems = this.oPropertiesTable.getItems();
+			var nbrOfItems = aItems.length;
+			if (this.oPropertiesTable.getItems().length === 1) {
+				this.sValue = this.oPropertiesTable.getItems()[0].getCells()[0].getValue();
+			} else if (this.oPropertiesTable.getItems().length > 1) {
+				var beforeLastItem = aItems[nbrOfItems - 2];
+				this.sValue = beforeLastItem.getCells()[0].getValue();
 
-						if (this.sValue !== "") {
-							var lastItemIndex = aItems.length - 1;
-							if (!this.itemIsEmpty(aItems[lastItemIndex].getCells())) {
-								this.oPropertiesTable.addItem(this._createAddLine());
-								this._addAddLine(this.oPropertiesTable);
-							}
-						} else {
-							aItems = this.oPropertiesTable.getItems();
-							lastItemIndex = aItems.length - 1;
-							if (this.itemIsEmpty(aItems[lastItemIndex].getCells())) {
-								this.oPropertiesTable.removeItem(this.oPropertiesTable.getItems()[lastItemIndex]);
-								this._removeLine(this.oPropertiesTable);
-							}
-						}
+			}
 
-					*/
+			if (this.sValue !== "") {
+				var lastItemIndex = aItems.length - 1;
+				if (!this.itemIsEmpty(aItems[lastItemIndex].getCells())) {
+					this.oPropertiesTable.addItem(this._createAddLine());
+					this._addAddLine(this.oPropertiesTable);
+				}
+			} else {
+				aItems = this.oPropertiesTable.getItems();
+				lastItemIndex = aItems.length - 1;
+				if (this.itemIsEmpty(aItems[lastItemIndex].getCells())) {
+					this.oPropertiesTable.removeItem(this.oPropertiesTable.getItems()[lastItemIndex]);
+					this._removeLine(this.oPropertiesTable);
+				}
+			}
 		},
 		_getNewEmptyItem: function (oTableItem) {
 			oTableItem.getCells()[0].setValue("");
@@ -485,9 +482,9 @@ sap.ui.define([
 			}
 		},
 		onNewItemChange: function (oEvent, oController) {
-			// oEvent.getSource().getParent().getParent().getItems()[0].getCells()[0].fireLiveChange({
-			// 	event: oEvent
-			// });
+			oEvent.getSource().getParent().getParent().getItems()[0].getCells()[0].fireLiveChange({
+				event: oEvent
+			});
 		},
 		onAddProperty: function (oEvent) {
 			this.oPropertiesTable.addItem(this._createAddLine());
@@ -552,7 +549,7 @@ sap.ui.define([
 				});
 			}
 			/*Checking assocations*/
-			var oAssociationMsgs = checkOdata.checkAssociations.apply(this);
+			// var oAssociationMsgs = checkOdata.checkAssociations.apply(this);
 			// if (oEntityCheckMsg.length > 0) {
 			// 	oEntityCheckMsg.forEach(function (error) {
 			// 		aMsgCheck.push(error);
@@ -560,7 +557,7 @@ sap.ui.define([
 			// }
 			/* Creating Console msgs Array */
 
-			if (aMsgCheck.length > 0 || oAssociationMsgs.length > 0) {
+			if (aMsgCheck.length > 0) {
 				this.getView().byId("successMsg").setVisible(false);
 				if (aMsgCheck[0].type === "Error") {
 					this.getView().byId("errBt").setType("Negative");
@@ -694,13 +691,13 @@ sap.ui.define([
 			saveProject.saveProperties.apply(this);
 
 			/*Saving Associations*/
-			if (this.getView().byId("associationSwitch").getState()) {
+			if (this.getView().byId("AssociationWizard").getVisible()) {
 				this.bSaved = this.bSaved && saveProject.createAssociation.apply(this);
 			}
-			/*Saving Associations Set/Navigations*/
-			if (this.getView().byId("associationSwitch").getState() && this.bSaved) {
-				this.bSaved = this.bSaved && saveProject.createAssociationSet.apply(this, [this.getView().byId("assSetName").getValue()]);
-			}
+			// /*Saving Associations Set/Navigations*/
+			// if (this.getView().byId("associationSwitch").getState() && this.bSaved) {
+			// 	this.bSaved = this.bSaved && saveProject.createAssociationSet.apply(this, [this.getView().byId("assSetName").getValue()]);
+			// }
 			/*Saving Navigations*/
 			/*if (this.bSaved) {
 				this.bSaved = this.bSaved && saveProject.createNavigationProps.apply(this);
@@ -868,15 +865,15 @@ sap.ui.define([
 					this.getView().byId("refConst").destroyItems();
 				}
 				/*setting entitySet for associationSets*/
-				var allAssociationsSetName = this.getView().byId("Tree").getModel().getData()[0].nodes[2].nodes;
-				allAssociationsSetName.forEach(function (assSet) {
-					if (assSet.entityName === sPrincipalEntity) {
-						that.getView().byId("prinEntitySet").setValue(assSet.text);
-					}
-					if (assSet.entityName === sSecEntity) {
-						that.getView().byId("secEntitySetName").setValue(assSet.text);
-					}
-				});
+				// var allAssociationsSetName = this.getView().byId("Tree").getModel().getData()[0].nodes[2].nodes;
+				// allAssociationsSetName.forEach(function (assSet) {
+				// 	if (assSet.entityName === sPrincipalEntity) {
+				// 		that.getView().byId("prinEntitySet").setValue(assSet.text);
+				// 	}
+				// 	if (assSet.entityName === sSecEntity) {
+				// 		that.getView().byId("secEntitySetName").setValue(assSet.text);
+				// 	}
+				// });
 
 				this.aPrinEnityKeys.forEach(function (Key, index) {
 					var columnListItem = new sap.m.ColumnListItem("inputId_" + index.toString(), {
@@ -1058,6 +1055,10 @@ sap.ui.define([
 		},
 		onCollapseSrvTree: function (oEvent) {
 			this.getView().byId("Tree").expandToLevel(0);
+		},
+		onCreateNewService: function (oEvent) {
+			this.getView().getModel("creationWizard").setProperty("/createEntities", true);
+			this.getView().getModel("creationWizard").setProperty("/createAssociation", false);
 		}
 
 	});

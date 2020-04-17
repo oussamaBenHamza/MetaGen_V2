@@ -2,7 +2,7 @@ sap.ui.define(["./propsTableRendering",
 	"sap/m/Menu",
 	"sap/m/MenuItem",
 	"sap/m/MessageToast"
-], function (propsTableRendering, Menu, MenuItem,MessageToast) {
+], function (propsTableRendering, Menu, MenuItem, MessageToast) {
 	"use strict";
 
 	var Module = {
@@ -59,14 +59,14 @@ sap.ui.define(["./propsTableRendering",
 		},
 		manageProject: function (oEvent) {
 			var that = this;
-			var selectedItem = this.getView().byId("Tree").getSelectedItem();
-			
-			if (selectedItem) {
+			this.selectedItem = this.getView().byId("Tree").getSelectedItem();
+
+			if (this.selectedItem) {
 				this.getView().byId("Tree").setContextMenu(new Menu({
 					items: [
 						new MenuItem({
-							text: "Update",
-							press : that.upDateProject.updateProjectFroCtxMenu
+							text: "Create",
+							press: [that.upDateProject.updateProjectFroCtxMenu, that]
 						}),
 						new MenuItem({
 							text: "Delete"
@@ -75,10 +75,25 @@ sap.ui.define(["./propsTableRendering",
 				}));
 			}
 		},
-		updateProjectFroCtxMenu : function(oEvent){
-			var that = this;
+		updateProjectFroCtxMenu: function (oEvent) {
+			var itemsSelected = this.selectedItem.getProperty("title");
+			if (itemsSelected === "Entity Types" || itemsSelected === "Entity Sets" || itemsSelected === "New Service") {
+				this.getView().getModel("creationWizard").setProperty("/createEntities", true);
+				this.getView().getModel("creationWizard").setProperty("/createAssociation", false);
+			}
+			if (itemsSelected === "Associations" || itemsSelected === "Associations Sets") {
+				/*Creating Association / Association Sets*/
+				this.getView().getModel("creationWizard").setProperty("/createEntities", false);
+				this.getView().getModel("creationWizard").setProperty("/createAssociation", true);
+				
+				var allEntities = this.getOwnerComponent().getAllEntities.apply(this);
+				if(allEntities.length > 0){
+					this.getView().getModel("onCreateAssEnabled").setProperty("/enabled",true);
+				}
+				
+			}
 		}
-		
+
 	};
 	return Module;
 });

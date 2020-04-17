@@ -30,18 +30,18 @@
 					enabled="false">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
 				</Button>
-				<Button type="Success" icon="sap-icon://save" tooltip="Save" press="onSave">
+				<Button id="saveBt" type="Success" icon="sap-icon://save" tooltip="Save" press="onSave">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
 				</Button>
 				<Button type="Negative" icon="sap-icon://sys-cancel-2" tooltip="Cancel" press="onCancel">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
 				</Button>
-				<Button id="fullScreenBt" icon="sap-icon://full-screen" press="handleToggleSecondaryContent">
+				<Button tooltip="Full Screen" id="fullScreenBt" icon="sap-icon://full-screen" press="handleToggleSecondaryContent">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
 				</Button>
 			</OverflowToolbar>
-			<Wizard id="CreateMetaDataWiz" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" complete="wizardCompletedHandler"
-				showNextButton="true">
+			<Wizard id="CreateMetaDataWiz" class="sapUiResponsivePadding--header sapUiResponsivePadding--content"
+				showNextButton="true" visible="{creationWizard>/createEntities}" finishButtonText="Save">
 				<WizardStep id="initService" title="Create Service" validated="true" complete="onCreateServiceFinish">
 					<l:BlockLayout background="{/selectedBackground}">
 						<l:BlockLayoutRow>
@@ -237,61 +237,11 @@
 							</l:BlockLayoutCell>
 						</l:BlockLayoutRow>
 					</l:BlockLayout>
-					<l:BlockLayout background="{/selectedBackground}">
-						<l:BlockLayoutRow>
-							<l:BlockLayoutCell>
-								<Table id="navPropsTable" growing="true" growingThreshold="15" mode="MultiSelect">
-									<headerToolbar>
-										<OverflowToolbar id="navPropsTableTbar" enabled="false">
-											<Title text="Navigation Properties"/>
-											<ToolbarSpacer/>
-											<Button type="Success" icon="sap-icon://add" tooltip="Add Property" press="onAddNavProperty"/>
-											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)" press="onDeleteNavProperties"/>
-											<Button icon="sap-icon://reset" tooltip="Reset" press="onResetNavPropsTable"/>
-										</OverflowToolbar>
-									</headerToolbar>
-									<columns enabled="false">
-										<Column>
-											<customData>
-												<core:CustomData key="p13nData"/>
-											</customData>
-											<Text text="Name"/>
-										</Column>
-										<Column >
-											<customData>
-												<core:CustomData key="p13nData"/>
-											</customData>
-											<Text text="Relationship Name"/>
-										</Column>
-										<Column >
-											<customData>
-												<core:CustomData key="p13nData"/>
-											</customData>
-											<Text text="Label"/>
-										</Column>
-									</columns>
-									<items >
-										<ColumnListItem >
-											<cells>
-												<Input value="" description="" liveChange="onPropertyNameChange" enabled="false"/>
-												<Input type="Text" id="refConst_id1" showSuggestion="true" showValueHelp="true" valueHelpRequest="openAssociations" enabled="false">
-													<suggestionItems></suggestionItems>
-												</Input>
-												<Input value="" description="" liveChange="onPropertyNameChange" enabled="false"/>
-											</cells>
-										</ColumnListItem>
-									</items>
-								</Table>
-							</l:BlockLayoutCell>
-						</l:BlockLayoutRow>
-					</l:BlockLayout>
 				</WizardStep>
-				<WizardStep id="CreateAssociation" title="Create Association" validated="true">
-					<Switch id="associationSwitch" state="false" customTextOn="Yes" customTextOff="No" change=".associationModule.createAssociation">
-						<layoutData>
-							<FlexItemData growFactor="1"/>
-						</layoutData>
-					</Switch>
+			</Wizard>
+			<Wizard id="AssociationWizard" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" showNextButton="true"
+				visible="{creationWizard>/createAssociation}">
+				<WizardStep id="CreateAssociation" title="Create Association " validated="true">
 					<l:BlockLayout id="firstBlock" background="{/selectedBackground}">
 						<l:BlockLayoutRow>
 							<l:BlockLayoutCell id="carousselCell">
@@ -304,7 +254,7 @@
 										<f:formContainers>
 											<f:FormContainer>
 												<f:formElements>
-													<f:FormElement label="Associatin Name">
+													<f:FormElement label="Association Name">
 														<f:fields>
 															<Input value="" id="assName" enabled="{onCreateAssEnabled>/enabled}"/>
 														</f:fields>
@@ -383,7 +333,7 @@
 										<OverflowToolbar enabled="{onCreateAssEnabled>/enabled}">
 											<Title id="title" text="Referential Constraints"/>
 											<ToolbarSpacer/>
-											<Button type="Success" icon="sap-icon://add" tooltip="Add Property"/>
+											<Button type="Success" icon="sap-icon://add" tooltip="Add Property" press="onAddRefConstraintes"/>
 											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)"/>
 											<Button icon="sap-icon://reset" tooltip="Reset"/>
 										</OverflowToolbar>
@@ -434,11 +384,13 @@
 							</l:BlockLayoutCell>
 						</l:BlockLayoutRow>
 					</l:BlockLayout>
-					<l:BlockLayout id="thirdBlock" background="{/selectedBackground}">
+				</WizardStep>
+				<WizardStep id="CreateAssociationSet" title="Create Association" validated="true">
+					<l:BlockLayout background="{/selectedBackground}">
 						<l:BlockLayoutRow>
-							<l:BlockLayoutCell id="thirdcarousselCell">
+							<l:BlockLayoutCell>
 								<HBox>
-									<f:Form id="associationSetForm" editable="true">
+									<f:Form editable="true">
 										<f:layout>
 											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
 												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
@@ -475,7 +427,7 @@
 											</f:FormContainer>
 										</f:formContainers>
 									</f:Form>
-									<f:Form id="secEntitySet" editable="true">
+									<f:Form editable="true">
 										<f:layout>
 											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
 												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
@@ -483,9 +435,9 @@
 										<f:formContainers>
 											<f:FormContainer>
 												<f:formElements>
-													<f:FormElement label="Dependant Entity Set Name">
+													<f:FormElement label="Association Set Name">
 														<f:fields>
-															<Input id="secEntitySetName" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntitiesSets"
+															<Input id="assSecSetName" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntitiesSets"
 																enabled="{onCreateAssEnabled>/enabled}">
 																<suggestionItems></suggestionItems>
 															</Input>
