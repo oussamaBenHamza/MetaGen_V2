@@ -1,0 +1,33 @@
+<mvc:View controllerName="metaGen.obh.MetaGen.controller.metaGen" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+					<content>
+						<l:BlockLayout id="firstBlock" background="Dashboard">
+							<l:BlockLayoutRow>
+								<l:BlockLayoutCell id="carousselCell">
+									<l:Grid id="tileGrid" position="Center" hSpacing="0.5" width="100%" defaultSpan="XL12 L12 M12 S12">
+										<l:HorizontalLayout id="smallCont" class="smallTilContainer" allowWrapping="true">
+											<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop" header="Create" subheader="Entity Type/Entity Set" press="onCreat">
+												<TileContent unit="New entitys" footerColor="Good">
+													<ImageContent src="sap-icon://create-form"/>
+												</TileContent>
+											</GenericTile>
+											<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop" header="Update" subheader="Entity Type/Entity Set"
+												press="onUpdate">
+												<TileContent unit="Update existing" footerColor="Good">
+													<ImageContent src="sap-icon://edit"/>
+												</TileContent>
+											</GenericTile>
+										</l:HorizontalLayout>
+									</l:Grid>
+								</l:BlockLayoutCell>
+							</l:BlockLayoutRow>
+						</l:BlockLayout>
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

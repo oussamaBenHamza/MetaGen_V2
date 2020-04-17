@@ -1,0 +1,17 @@
+/* Enter your custom styles here */
+
+.sapUiSizeCompact .sapMTB {
+    height: 2.75rem;
+}
+
+.entitiesDialogClass {
+    height: 50%;
+}
+
+.SettingPanel {
+    width: 400px;
+}
+
+.HighlighError {
+	background-color: antiquewhite;
+}

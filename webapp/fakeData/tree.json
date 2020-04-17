@@ -1,0 +1,9 @@
+ [{
+ 	"text": "Entity Types",
+ 	"ref": "sap-icon://heatmap-chart",
+ 	"nodes": []
+ }, {
+ 	"text": "Entity Sets",
+ 	"ref": "sap-icon://group-2",
+ 	"nodes": []
+ }]

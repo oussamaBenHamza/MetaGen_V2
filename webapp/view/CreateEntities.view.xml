@@ -1,0 +1,506 @@
+<mvc:View controllerName="metaGen.obh.MetaGen.controller.CreateEntities" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:m="sap.m" class="fullHeight" xmlns:f="sap.ui.layout.form">
+	<u:SplitContainer id="mySplitContainer" showSecondaryContent="true">
+		<u:secondaryContent>
+			<Tree id="Tree" items="{path: '/'}" mode="SingleSelectMaster">
+				<headerToolbar>
+					<OverflowToolbar>
+						<Button icon="sap-icon://settings" tooltip="Settings" press="onAppSettings"/>
+						<ToolbarSpacer/>
+						<Button icon="sap-icon://create" tooltip="Create Project" press="onCreateNewService"/>
+						<Button icon="sap-icon://delete" tooltip="Delete Project" press="onDelete"/>
+						<Button icon="sap-icon://expand-all" tooltip="Expand All" press="onExpandSrvTree"/>
+						<Button icon="sap-icon://collapse-all" tooltip="Collapse All" press="onCollapseSrvTree"/>
+					</OverflowToolbar>
+				</headerToolbar>
+				<StandardTreeItem title="{text}" icon="{ref}" press="onItemPress"/>
+			</Tree>
+		</u:secondaryContent>
+		<u:content id="Content">
+			<OverflowToolbar id="otbFooter">
+				<Button id="errBt" type="Negative" icon="sap-icon://warning" tooltip="Console" press="onOpenErrors" visible="false">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+				</Button>
+				<MessageStrip id="successMsg" text="" type="Success" showIcon="true" showCloseButton="true" visible="false"></MessageStrip>
+				<ToolbarSpacer/>
+				<Button id="checkBt" type="Neutral" icon="sap-icon://accept" tooltip="Check" press="onCheck" enabled="false">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+				</Button>
+				<Button id="generateBt" type="Emphasized" icon="sap-icon://developer-settings" tooltip="Generate" press=".generateProjectdModule.onGenerate"
+					enabled="false">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+				</Button>
+				<Button type="Success" icon="sap-icon://save" tooltip="Save" press="onSave">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+				</Button>
+				<Button type="Negative" icon="sap-icon://sys-cancel-2" tooltip="Cancel" press="onCancel">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+				</Button>
+				<Button id="fullScreenBt" icon="sap-icon://full-screen" press="handleToggleSecondaryContent">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+				</Button>
+			</OverflowToolbar>
+			<Wizard id="CreateMetaDataWiz" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" complete="wizardCompletedHandler"
+				showNextButton="true">
+				<WizardStep id="initService" title="Create Service" validated="true" complete="onCreateServiceFinish">
+					<l:BlockLayout background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell>
+								<f:Form id="initSrvForm" editable="true">
+									<f:layout>
+										<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+											emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+									</f:layout>
+									<f:formContainers>
+										<f:FormContainer>
+											<f:formElements>
+												<f:FormElement label="Project Name">
+													<f:fields>
+														<Input value="{oDataService>/projectName}" id="SerName" liveChange="onSrvNameLiveChange"/>
+														<Button id="editPrjctBt" icon="sap-icon://edit" tooltip="Edit Projecr Name" press="onEditProject" visible="false" width="10%"/>
+													</f:fields>
+												</f:FormElement>
+											</f:formElements>
+										</f:FormContainer>
+									</f:formContainers>
+								</f:Form>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+				</WizardStep>
+				<WizardStep id="initDataModel" title="Create Entity Type/Set" validated="true" complete="onInitFinished">
+					<l:BlockLayout background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell>
+								<f:Form editable="true">
+									<f:layout>
+										<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+											emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+									</f:layout>
+									<f:formContainers id="initDataForm" enabled="false">
+										<f:FormContainer>
+											<f:formElements>
+												<f:FormElement label="Entity Name">
+													<f:fields>
+														<Input value="" id="EntityName" liveChange="onEntityNameLiveChnage" enabled="false"/>
+													</f:fields>
+												</f:FormElement>
+											</f:formElements>
+											<f:formElements>
+												<f:FormElement label="Create Entity Set">
+													<f:fields>
+														<CheckBox id="createEntitySet" select="onSelect" enabled="false"/>
+													</f:fields>
+												</f:FormElement>
+											</f:formElements>
+											<f:formElements>
+												<f:FormElement label="Entity Set Name">
+													<f:fields>
+														<Input value="" id="entitySetName" enabled="false"/>
+													</f:fields>
+												</f:FormElement>
+											</f:formElements>
+										</f:FormContainer>
+									</f:formContainers>
+								</f:Form>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+				</WizardStep>
+				<WizardStep id="CreateEntity" title="Create Properties" validated="true" complete="onEntitiesFinished">
+					<l:BlockLayout background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell>
+								<Table id="table" growing="true" growingThreshold="15" mode="MultiSelect">
+									<headerToolbar>
+										<OverflowToolbar enabled="false">
+											<Title text="Properties"/>
+											<ToolbarSpacer/>
+											<Button id="addPropBt" type="Success" icon="sap-icon://add" tooltip="Add Property" press="onAddProperty"/>
+											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)" press="onDeleteSelectedProperties"/>
+											<Button id="resetPropsBt" icon="sap-icon://reset" tooltip="Reset" press="onResetPropsTable"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns enabled="false">
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Property Name"/>
+										</Column>
+										<Column width="5%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Is Key"/>
+										</Column>
+										<Column width="10%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Type"/>
+										</Column>
+										<Column width="7%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Precision"/>
+										</Column>
+										<Column width="7%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Scale"/>
+										</Column>
+										<Column width="7%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Max Length"/>
+										</Column>
+										<Column width="7%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Createable"/>
+										</Column>
+										<Column width="7%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Updatable"/>
+										</Column>
+										<Column width="6%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Sortable"/>
+										</Column>
+										<Column width="6%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Nullable"/>
+										</Column>
+										<Column width="6%">
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Filtrable"/>
+										</Column>
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Label"/>
+										</Column>
+									</columns>
+									<items >
+										<ColumnListItem >
+											<cells>
+												<Input value="" description="" liveChange="onPropertyNameChange" enabled="false"/>
+											</cells>
+											<cells>
+												<CheckBox selected="false" enabled="false"/>
+											</cells>
+											<ComboBox id="typeList" enabled="false">
+												<core:Item key="empty" text="empty"/>
+												<core:Item key="Binary" text="Binary"/>
+												<core:Item key="Boolean" text="Boolean"/>
+												<core:Item key="Byte" text="Byte"/>
+												<core:Item key="DateTime" text="DateTime"/>
+												<core:Item key="DateTimeOffset" text="DateTimeOffset"/>
+												<core:Item key="Decimal" text="Decimal"/>
+												<core:Item key="Double" text="Double"/>
+												<core:Item key="Float" text="Float"/>
+												<core:Item key="Guid" text="Guid"/>
+												<core:Item key="Int16" text="Int16"/>
+												<core:Item key="Int32" text="Int32"/>
+												<core:Item key="Int64" text="Int64"/>
+												<core:Item key="SByte" text="SByte"/>
+												<core:Item key="Single" text="Single"/>
+												<core:Item key="String" text="String"/>
+												<core:Item key="Time" text="Time"/>
+											</ComboBox>
+											<Input value="" description="" type="Number" enabled="false"/>
+											<Input value="" description="" type="Number" enabled="false"/>
+											<Input value="" description="" type="Number" enabled="false"/>
+											<CheckBox selected="false" enabled="false"/>
+											<CheckBox selected="false" enabled="false"/>
+											<CheckBox selected="false" enabled="false"/>
+											<CheckBox selected="false" enabled="false"/>
+											<CheckBox selected="false" enabled="false"/>
+											<Input value="" description="" enabled="false"/>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+					<l:BlockLayout background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell>
+								<Table id="navPropsTable" growing="true" growingThreshold="15" mode="MultiSelect">
+									<headerToolbar>
+										<OverflowToolbar id="navPropsTableTbar" enabled="false">
+											<Title text="Navigation Properties"/>
+											<ToolbarSpacer/>
+											<Button type="Success" icon="sap-icon://add" tooltip="Add Property" press="onAddNavProperty"/>
+											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)" press="onDeleteNavProperties"/>
+											<Button icon="sap-icon://reset" tooltip="Reset" press="onResetNavPropsTable"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns enabled="false">
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Name"/>
+										</Column>
+										<Column >
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Relationship Name"/>
+										</Column>
+										<Column >
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Label"/>
+										</Column>
+									</columns>
+									<items >
+										<ColumnListItem >
+											<cells>
+												<Input value="" description="" liveChange="onPropertyNameChange" enabled="false"/>
+												<Input type="Text" id="refConst_id1" showSuggestion="true" showValueHelp="true" valueHelpRequest="openAssociations" enabled="false">
+													<suggestionItems></suggestionItems>
+												</Input>
+												<Input value="" description="" liveChange="onPropertyNameChange" enabled="false"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+				</WizardStep>
+				<WizardStep id="CreateAssociation" title="Create Association" validated="true">
+					<Switch id="associationSwitch" state="false" customTextOn="Yes" customTextOff="No" change=".associationModule.createAssociation">
+						<layoutData>
+							<FlexItemData growFactor="1"/>
+						</layoutData>
+					</Switch>
+					<l:BlockLayout id="firstBlock" background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell id="carousselCell">
+								<HBox>
+									<f:Form id="associationForm" editable="true">
+										<f:layout>
+											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+										</f:layout>
+										<f:formContainers>
+											<f:FormContainer>
+												<f:formElements>
+													<f:FormElement label="Associatin Name">
+														<f:fields>
+															<Input value="" id="assName" enabled="{onCreateAssEnabled>/enabled}"/>
+														</f:fields>
+													</f:FormElement>
+												</f:formElements>
+											</f:FormContainer>
+										</f:formContainers>
+									</f:Form>
+									<f:Form id="firstSet" editable="true">
+										<f:layout>
+											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+										</f:layout>
+										<f:formContainers>
+											<f:FormContainer>
+												<f:formElements>
+													<f:FormElement label="Principal Entity Name">
+														<f:fields>
+															<VBox>
+																<Input id="prinEntity" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntities"
+																	enabled="{onCreateAssEnabled>/enabled}">
+																	<suggestionItems></suggestionItems>
+																</Input>
+																<Text text="Cardinality :"/>
+																<ComboBox id="cardinal" width="25%" enabled="{onCreateAssEnabled>/enabled}">
+																	<core:Item key="0" text="0"/>
+																	<core:Item key="1" text="1"/>
+																	<core:Item key="M" text="M"/>
+																	<core:Item key="N" text="N"/>
+																</ComboBox>
+															</VBox>
+														</f:fields>
+													</f:FormElement>
+												</f:formElements>
+											</f:FormContainer>
+										</f:formContainers>
+									</f:Form>
+									<f:Form id="secSet" editable="true">
+										<f:layout>
+											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+										</f:layout>
+										<f:formContainers>
+											<f:FormContainer>
+												<f:formElements>
+													<f:FormElement label="Dependant Entity Name">
+														<f:fields>
+															<VBox>
+																<Input id="secSetName" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntities"
+																	enabled="{onCreateAssEnabled>/enabled}">
+																	<suggestionItems></suggestionItems>
+																</Input>
+																<Text text="Cardinality :"/>
+																<ComboBox id="cardinal2" width="25%" enabled="{onCreateAssEnabled>/enabled}">
+																	<core:Item key="0" text="0"/>
+																	<core:Item key="1" text="1"/>
+																	<core:Item key="M" text="M"/>
+																	<core:Item key="N" text="N"/>
+																</ComboBox>
+															</VBox>
+														</f:fields>
+													</f:FormElement>
+												</f:formElements>
+											</f:FormContainer>
+										</f:formContainers>
+									</f:Form>
+								</HBox>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+					<l:BlockLayout id="secBlock" background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell id="secBlkcarousselCell">
+								<Table id="refConst" growing="true" growingThreshold="15" mode="None">
+									<headerToolbar >
+										<OverflowToolbar enabled="{onCreateAssEnabled>/enabled}">
+											<Title id="title" text="Referential Constraints"/>
+											<ToolbarSpacer/>
+											<Button type="Success" icon="sap-icon://add" tooltip="Add Property"/>
+											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)"/>
+											<Button icon="sap-icon://reset" tooltip="Reset"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns enabled="false">
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Principal Entity"/>
+										</Column>
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Principal Key"/>
+										</Column>
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Dependant property"/>
+										</Column>
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Dependant Entity"/>
+										</Column>
+									</columns>
+									<items enabled="{onCreateAssEnabled>/enabled}">
+										<ColumnListItem visible="false">
+											<cells>
+												<Text/>
+											</cells>
+											<cells>
+												<Input type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntities">
+													<suggestionItems></suggestionItems>
+												</Input>
+											</cells>
+											<Text/>
+											<Input type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntities">
+												<suggestionItems></suggestionItems>
+											</Input>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+					<l:BlockLayout id="thirdBlock" background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell id="thirdcarousselCell">
+								<HBox>
+									<f:Form id="associationSetForm" editable="true">
+										<f:layout>
+											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+										</f:layout>
+										<f:formContainers>
+											<f:FormContainer>
+												<f:formElements>
+													<f:FormElement label="Association Set Name">
+														<f:fields>
+															<Input value="" id="assSetName" enabled="{onCreateAssEnabled>/enabled}"/>
+														</f:fields>
+													</f:FormElement>
+												</f:formElements>
+											</f:FormContainer>
+										</f:formContainers>
+									</f:Form>
+									<f:Form id="firstEntitySet" editable="true">
+										<f:layout>
+											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+										</f:layout>
+										<f:formContainers>
+											<f:FormContainer>
+												<f:formElements>
+													<f:FormElement label="Principal Entity Set Name">
+														<f:fields>
+															<Input id="prinEntitySet" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntitiesSets"
+																enabled="{onCreateAssEnabled>/enabled}">
+																<suggestionItems></suggestionItems>
+															</Input>
+														</f:fields>
+													</f:FormElement>
+												</f:formElements>
+											</f:FormContainer>
+										</f:formContainers>
+									</f:Form>
+									<f:Form id="secEntitySet" editable="true">
+										<f:layout>
+											<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+												emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+										</f:layout>
+										<f:formContainers>
+											<f:FormContainer>
+												<f:formElements>
+													<f:FormElement label="Dependant Entity Set Name">
+														<f:fields>
+															<Input id="secEntitySetName" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntitiesSets"
+																enabled="{onCreateAssEnabled>/enabled}">
+																<suggestionItems></suggestionItems>
+															</Input>
+														</f:fields>
+													</f:FormElement>
+												</f:formElements>
+											</f:FormContainer>
+										</f:formContainers>
+									</f:Form>
+								</HBox>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+				</WizardStep>
+			</Wizard>
+		</u:content>
+	</u:SplitContainer>
+</mvc:View>

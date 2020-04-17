@@ -1,0 +1,21 @@
+ [{
+ 	"text": "New Service",
+ 	"ref": "sap-icon://tree",
+ 	"nodes": [{
+ 		"text": "Entity Types",
+ 		"ref": "sap-icon://heatmap-chart",
+ 		"nodes": []
+ 	}, {
+ 		"text": "Associations",
+ 		"ref": "sap-icon://radar-chart",
+ 		"nodes": []
+ 	}, {
+ 		"text": "Entity Sets",
+ 		"ref": "sap-icon://group-2",
+ 		"nodes": []
+ 	}, {
+ 		"text": "Associations Sets",
+ 		"ref": "sap-icon://multiple-radar-chart",
+ 		"nodes": []
+ 	}]
+ }]
