@@ -10,6 +10,17 @@ sap.ui.define([], function () {
 			this.byId(sId).attachBrowserEvent("mouseout", function (oEvent) {
 				that.byId(sId).setText("");
 			});
+		},
+		onToggleText: function (oEvent) {
+			if (oEvent.getSource().getSelectedKey() === "Yes") {
+				this.rendering.toggleTextonMouseOver.apply(this, ["checkBt", "Check"]);
+				this.rendering.toggleTextonMouseOver.apply(this, ["generateBt", "Generate"]);
+				this.rendering.toggleTextonMouseOver.apply(this, ["saveBt", "Save"]);
+			} else if (oEvent.getSource().getSelectedKey() === "No") {
+				this.rendering.toggleTextonMouseOver.apply(this, ["checkBt", ""]);
+				this.rendering.toggleTextonMouseOver.apply(this, ["generateBt", ""]);
+				this.rendering.toggleTextonMouseOver.apply(this, ["saveBt", ""]);
+			}
 		}
 	};
 	return Module;

@@ -30,6 +30,7 @@ sap.ui.define([
 		 */
 		associationModule: createAssociation,
 		generateProjectdModule: generateProject,
+		renderingModule : rendering,
 		onInit: function () {
 			this.fullScreen = true;
 			this.saveProject = saveProject;
@@ -37,6 +38,7 @@ sap.ui.define([
 			this.propsTableRendering = propsTableRendering;
 			this.generateProject = generateProject;
 			this.createAssociation = createAssociation;
+			this.rendering = rendering;
 			// var oProjectModel = new JSONModel({
 			// 	projectName :"Z"
 			// });
@@ -54,6 +56,11 @@ sap.ui.define([
 				createAssociation: false,
 			});
 			this.getView().setModel(oVisibleWizard, "creationWizard");
+
+			var oToggleBtSettings = new sap.ui.model.json.JSONModel({
+				toggleState: "No"
+			});
+			this.getView().setModel(oToggleBtSettings, "ToggleBtSettings");
 
 			this.createdItems = 1;
 			this.navPropNumber = 2;
@@ -93,9 +100,8 @@ sap.ui.define([
 				upDateCurrentProject.manageProject.apply(that, [oEvent]);
 				// alert(oEvent.target.innerText);
 			});
-			rendering.toggleTextonMouseOver.apply(this, ["checkBt", "Check"]);
-			rendering.toggleTextonMouseOver.apply(this, ["generateBt", "Generate"]);
-			rendering.toggleTextonMouseOver.apply(this, ["saveBt", "Save"]);
+			// rendering.toggleTextonMouseOver.apply(this, ["generateBt", "Generate"]);
+			// rendering.toggleTextonMouseOver.apply(this, ["saveBt", "Save"]);
 		},
 		getTargetFromTree: function (selectedTarget) {
 			var projectName = this.getView().byId("SerName").getValue();

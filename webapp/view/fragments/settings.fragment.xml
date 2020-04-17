@@ -5,13 +5,25 @@
 				<content>
 					<Panel height="100%">
 						<VBox>
-							<Label text="Theme" design="Bold" id="VSDThemeLabel"/>
-							<SegmentedButton selectedKey="{/selectedBackground}" ariaDescribedBy="backgroundLabel" ariaLabelledBy="backgroundLabel">
-								<items>
-									<SegmentedButtonItem key="Default" text="Default"/>
-									<SegmentedButtonItem key="Dashboard" text="Dashboard"/>
-								</items>
-							</SegmentedButton>
+							<VBox>
+								<Label text="Theme" design="Bold" id="VSDThemeLabel"/>
+								<SegmentedButton selectedKey="{/selectedBackground}" ariaDescribedBy="backgroundLabel" ariaLabelledBy="backgroundLabel">
+									<items>
+										<SegmentedButtonItem key="Default" text="Default"/>
+										<SegmentedButtonItem key="Dashboard" text="Dashboard"/>
+									</items>
+								</SegmentedButton>
+							</VBox>
+							<VBox>
+								<Label text="Toggle Button Text" design="Bold"/>
+								<SegmentedButton selectedKey="{ToggleBtSettings>/toggleState}" ariaDescribedBy="backgroundLabel" ariaLabelledBy="backgroundLabel"
+									selectionChange=".renderingModule.onToggleText">
+									<items>
+										<SegmentedButtonItem key="Yes" text="Yes"/>
+										<SegmentedButtonItem key="No" text="No"/>
+									</items>
+								</SegmentedButton>
+							</VBox>
 						</VBox>
 					</Panel>
 				</content>
