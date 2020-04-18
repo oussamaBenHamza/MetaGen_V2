@@ -435,7 +435,7 @@
 										<f:formContainers>
 											<f:FormContainer>
 												<f:formElements>
-													<f:FormElement label="Association Set Name">
+													<f:FormElement label="Dependent EntitySet Name">
 														<f:fields>
 															<Input id="assSecSetName" type="Text" showSuggestion="true" showValueHelp="true" valueHelpRequest="openEntitiesSets"
 																enabled="{onCreateAssEnabled>/enabled}">

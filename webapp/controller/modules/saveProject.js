@@ -188,13 +188,13 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 					if (exist < 0) {
 						this.getView().byId("Tree").getModel().getData()[0].nodes[1].nodes.push(oAssociation);
 						this.getView().byId("Tree").getModel().refresh();
-						that.saveProject.enableNavigPropsCreation.apply(that);
+						// that.saveProject.enableNavigPropsCreation.apply(that);
 						return true;
 
 					} else {
 						this.getView().byId("Tree").getModel().getData()[0].nodes[1].nodes[exist] = oAssociation;
 						this.getView().byId("Tree").getModel().refresh();
-						that.saveProject.enableNavigPropsCreation.apply(that);
+						// that.saveProject.enableNavigPropsCreation.apply(that);
 						return true;
 					}
 				} else if (referentialConstraintsPrimKeys.length < this.getView().byId("refConst").getItems().length) {

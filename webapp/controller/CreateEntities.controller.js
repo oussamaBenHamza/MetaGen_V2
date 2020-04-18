@@ -30,7 +30,7 @@ sap.ui.define([
 		 */
 		associationModule: createAssociation,
 		generateProjectdModule: generateProject,
-		renderingModule : rendering,
+		renderingModule: rendering,
 		onInit: function () {
 			this.fullScreen = true;
 			this.saveProject = saveProject;
@@ -699,6 +699,7 @@ sap.ui.define([
 			/*Saving Associations*/
 			if (this.getView().byId("AssociationWizard").getVisible()) {
 				this.bSaved = this.bSaved && saveProject.createAssociation.apply(this);
+				this.bSaved = this.bSaved && saveProject.createAssociationSet.apply(this, [this.getView().byId("assSetName").getValue()]);
 			}
 			// /*Saving Associations Set/Navigations*/
 			// if (this.getView().byId("associationSwitch").getState() && this.bSaved) {
@@ -860,6 +861,9 @@ sap.ui.define([
 			}
 			if (this.inputId.indexOf("secEntitySetName") > -1) {
 				var inputId = "secEntitySetName";
+			}
+			if (this.inputId.indexOf("assSecSetName") > -1) {
+				var inputId = "assSecSetName";
 			}
 			this.getView().byId(inputId).setValue(selectedItem);
 			var sPrincipalEntity = this.getView().byId("prinEntity").getValue();
