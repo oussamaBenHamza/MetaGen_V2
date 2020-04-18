@@ -328,7 +328,7 @@
 					<l:BlockLayout id="secBlock" background="{/selectedBackground}">
 						<l:BlockLayoutRow>
 							<l:BlockLayoutCell id="secBlkcarousselCell">
-								<Table id="refConst" growing="true" growingThreshold="15" mode="None">
+								<Table id="refConst" growing="true" growingThreshold="15" mode="MultiSelect">
 									<headerToolbar >
 										<OverflowToolbar enabled="{onCreateAssEnabled>/enabled}">
 											<Title id="title" text="Referential Constraints"/>
