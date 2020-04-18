@@ -241,7 +241,7 @@
 			</Wizard>
 			<Wizard id="AssociationWizard" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" showNextButton="true"
 				visible="{creationWizard>/createAssociation}">
-				<WizardStep id="CreateAssociation" title="Create Association " validated="true">
+				<WizardStep id="CreateAssociation" title="Create Association" validated="true">
 					<l:BlockLayout id="firstBlock" background="{/selectedBackground}">
 						<l:BlockLayoutRow>
 							<l:BlockLayoutCell id="carousselCell">
@@ -385,7 +385,7 @@
 						</l:BlockLayoutRow>
 					</l:BlockLayout>
 				</WizardStep>
-				<WizardStep id="CreateAssociationSet" title="Create Association" validated="true">
+				<WizardStep id="CreateAssociationSet" title="Create Association Set" validated="true">
 					<l:BlockLayout background="{/selectedBackground}">
 						<l:BlockLayoutRow>
 							<l:BlockLayoutCell>
