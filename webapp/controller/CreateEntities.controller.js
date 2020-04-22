@@ -44,7 +44,7 @@ sap.ui.define([
 			// });
 			var oProjectModel = this.getOwnerComponent().getModel("oDataService");
 			this.getView().setModel(oProjectModel, "oDataService")
-			var oModel = new JSONModel(sap.ui.require.toUrl("metaGen/obh/MetaGen/fakeData") + "/serviceTree.json");
+			var oModel = new JSONModel(sap.ui.require.toUrl("metaGen/obh/MetaGen/ProjectTree") + "/serviceTree.json");
 			this.getView().setModel(oModel);
 			var oGoAssociation = new sap.ui.model.json.JSONModel({
 				enabled: false // Pas cliquable par défaut
