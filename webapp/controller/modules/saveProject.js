@@ -145,6 +145,7 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 				var allAssociationsName = this.getView().byId("Tree").getModel().getData()[0].nodes[1].nodes;
 
 				var referentialConstraintsPrimKeys = [];
+				var refConstraintsChecked = this.saveProject.checkRefConstraintsBeforeSave.apply(this);
 				this.getView().byId("refConst").getItems().forEach(function (oItem) {
 
 					// that.saveProject.saveRefConstraints(oItem,principalEntity,secondaryEntity);
@@ -258,6 +259,41 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 				}
 			});
 			return true;
+		},
+		checkRefConstraintsBeforeSave: function () {
+			var that = this;
+			var readyToSave = true;
+			var allRefConstraints = this.getView().byId("refConst").getItems();
+			allRefConstraints.forEach(function (aRefConst) {
+				var principalEntity = aRefConst.getCells()[0].getText();
+				var principalKey = aRefConst.getCells()[1].getValue();
+				var secondaryEntity = aRefConst.getCells()[2].getText();
+				var dependentkee = aRefConst.getCells()[3].getValue();
+
+				var primaryKeyType = that.saveProject.getType.apply(that, [principalEntity, principalKey]);
+				var primaryKeyType = that.saveProject.getType.apply(that, [principalEntity, principalKey]);
+				if (primaryKeyType === primaryKeyType) {
+					readyToSave &= true;
+				}else{
+					readyToSave &= false;
+				}
+
+			});
+			return readyToSave;
+		},
+		getType: function (sEntityName, sPropName) {
+			var that = this;
+			var propType = "";
+			this.getView().byId("Tree").getModel().getData()[0].nodes[0].nodes.forEach(function (oItem) {
+				if (oItem.text === sEntityName) {
+					oItem.nodes[0].nodes.forEach(function (oProp) {
+						if (oProp.text === sPropName) {
+							propType = oProp.type;
+						}
+					})
+				}
+			});
+			return propType;
 		}
 
 	};
