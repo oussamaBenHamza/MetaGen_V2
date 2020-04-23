@@ -86,7 +86,7 @@ sap.ui.define([
 
 			this.byId("Tree").attachBrowserEvent("dblclick", function (oEvent) {
 				var selectedItem = this.getSelectedItem();
-				upDateCurrentProject.upDateProject.apply(that, [oEvent,selectedItem]);
+				upDateCurrentProject.upDateProjectOnDbClick.apply(that, [oEvent,selectedItem]);
 			});
 			this.byId("Tree").attachBrowserEvent("contextmenu", function (oEvent) {
 				var selectedItem;

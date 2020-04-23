@@ -41,6 +41,14 @@ sap.ui.define(["./propsTableRendering",
 				}
 
 			}
+		},
+		upDateProjectOnDbClick : function(oSelectedItem){
+			var selectedItemTitle = oSelectedItem.getProperty("title");
+			if(selectedItemTitle === "Entity Types"){
+				alert("Entity Types");
+			}else if(this.isEntity(selectedItemTitle)){
+				alert(selectedItemTitle + "is entity");
+			}
 		}
 
 	};
