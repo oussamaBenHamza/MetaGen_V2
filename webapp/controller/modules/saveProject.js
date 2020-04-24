@@ -274,7 +274,7 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 				var primaryKeyType = that.saveProject.getType.apply(that, [principalEntity, principalKey]);
 				if (primaryKeyType === primaryKeyType) {
 					readyToSave &= true;
-				}else{
+				} else {
 					readyToSave &= false;
 				}
 
