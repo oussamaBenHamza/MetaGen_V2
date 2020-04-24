@@ -29,9 +29,16 @@ sap.ui.define(["./propsTableRendering",
 			if (itemsSelected === "Entity Types" || itemsSelected === "Entity Sets" || itemsSelected === "New Service") {
 				this.getView().getModel("creationWizard").setProperty("/createEntities", true);
 				this.getView().getModel("creationWizard").setProperty("/createAssociation", false);
+				this.getView().getModel("creationWizard").setProperty("/createNavProps", false);
+			}
+			if(itemsSelected === "Navigation Properties"){
+				this.getView().getModel("creationWizard").setProperty("/createAssociation", false);
+				this.getView().getModel("creationWizard").setProperty("/createEntities", false);
+				this.getView().getModel("creationWizard").setProperty("/createNavProps", true);
 			}
 			if (itemsSelected === "Associations" || itemsSelected === "Associations Sets") {
 				/*Creating Association / Association Sets*/
+				this.getView().getModel("creationWizard").setProperty("/createNavProps", false);
 				this.getView().getModel("creationWizard").setProperty("/createEntities", false);
 				this.getView().getModel("creationWizard").setProperty("/createAssociation", true);
 

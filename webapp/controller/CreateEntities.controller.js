@@ -54,6 +54,7 @@ sap.ui.define([
 			var oVisibleWizard = new sap.ui.model.json.JSONModel({
 				createEntities: false,
 				createAssociation: false,
+				createNavProps : false
 			});
 			this.getView().setModel(oVisibleWizard, "creationWizard");
 

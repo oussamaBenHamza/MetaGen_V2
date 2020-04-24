@@ -238,13 +238,16 @@
 						</l:BlockLayoutRow>
 					</l:BlockLayout>
 				</WizardStep>
+			</Wizard>
+			<Wizard id="navPropsWizard" visible="{creationWizard>/createNavProps}"
+				class="sapUiResponsivePadding--header sapUiResponsivePadding--content" showNextButton="true">
 				<WizardStep id="createNavProperties" title="Navigation Properties" validated="true">
 					<l:BlockLayout background="{/selectedBackground}">
 						<l:BlockLayoutRow>
 							<l:BlockLayoutCell>
-								<Table id="navTable" growing="true" growingThreshold="15" mode="MultiSelect" visible="false">
+								<Table id="navTable" growing="true" growingThreshold="15" mode="MultiSelect">
 									<headerToolbar>
-										<OverflowToolbar enabled="false" visible="false">
+										<OverflowToolbar enabled="false">
 											<ToolbarSpacer/>
 											<Button id="addNavPropBt" type="Success" icon="sap-icon://add" tooltip="Add Property" press="onAddProperty"/>
 											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)" press="onDeleteSelectedProperties"/>

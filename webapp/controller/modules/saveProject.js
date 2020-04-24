@@ -16,6 +16,10 @@ sap.ui.define(["sap/m/MessageToast"], function (MessageToast) {
 					text: "Properties",
 					"ref": "sap-icon://folder-blank",
 					nodes: []
+				}, {
+					text: "Navigation Properties",
+					"ref": "sap-icon://begin",
+					nodes: []
 				}]
 			};
 			if (this.bCreateNavigation) {
