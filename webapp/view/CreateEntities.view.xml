@@ -40,8 +40,8 @@
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
 				</Button>
 			</OverflowToolbar>
-			<Wizard id="CreateMetaDataWiz" class="sapUiResponsivePadding--header sapUiResponsivePadding--content"
-				showNextButton="true" visible="{creationWizard>/createEntities}" finishButtonText="Save">
+			<Wizard id="CreateMetaDataWiz" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" showNextButton="true"
+				visible="{creationWizard>/createEntities}" finishButtonText="Save">
 				<WizardStep id="initService" title="Create Service" validated="true" complete="onCreateServiceFinish">
 					<l:BlockLayout background="{/selectedBackground}">
 						<l:BlockLayoutRow>
@@ -231,6 +231,53 @@
 											<CheckBox selected="false" enabled="false"/>
 											<CheckBox selected="false" enabled="false"/>
 											<Input value="" description="" enabled="false"/>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</l:BlockLayoutCell>
+						</l:BlockLayoutRow>
+					</l:BlockLayout>
+				</WizardStep>
+				<WizardStep id="createNavProperties" title="Navigation Properties" validated="true">
+					<l:BlockLayout background="{/selectedBackground}">
+						<l:BlockLayoutRow>
+							<l:BlockLayoutCell>
+								<Table id="navTable" growing="true" growingThreshold="15" mode="MultiSelect" visible="false">
+									<headerToolbar>
+										<OverflowToolbar enabled="false" visible="false">
+											<ToolbarSpacer/>
+											<Button id="addNavPropBt" type="Success" icon="sap-icon://add" tooltip="Add Property" press="onAddProperty"/>
+											<Button type="Negative" icon="sap-icon://sys-minus" tooltip="Delete Property(s)" press="onDeleteSelectedProperties"/>
+											<Button id="resetNavPropsBt" icon="sap-icon://reset" tooltip="Reset" press="onResetPropsTable"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns enabled="false">
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Name"/>
+										</Column>
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Relationship Name"/>
+										</Column>
+										<Column>
+											<customData>
+												<core:CustomData key="p13nData"/>
+											</customData>
+											<Text text="Label"/>
+										</Column>
+									</columns>
+									<items >
+										<ColumnListItem >
+											<cells>
+												<Input value="" description="" liveChange="onPropertyNameChange"/>
+												<Input value="" description="" liveChange="onPropertyNameChange"/>
+												<Input value="" description="" liveChange="onPropertyNameChange"/>
+											</cells>
 										</ColumnListItem>
 									</items>
 								</Table>
