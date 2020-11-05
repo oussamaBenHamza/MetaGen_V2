@@ -6,9 +6,13 @@ sap.ui.define([], function () {
 			var that = this;
 			this.byId(sId).attachBrowserEvent("mouseover", function (oEvent) {
 				that.byId(sId).setText(sText);
+				that.byId(sId).addStyleClass("textSlide");
 			});
 			this.byId(sId).attachBrowserEvent("mouseout", function (oEvent) {
+				
 				that.byId(sId).setText("");
+				that.byId(sId).removeStyleClass("textSlide");
+				// that.byId(sId).removeStyleClass("animation");
 			});
 		},
 		onToggleText: function (oEvent) {
