@@ -31,6 +31,7 @@ sap.ui.define([
 		associationModule: createAssociation,
 		generateProjectdModule: generateProject,
 		renderingModule: rendering,
+		test : rendering,
 		onInit: function () {
 			this.fullScreen = true;
 			this.saveProject = saveProject;
