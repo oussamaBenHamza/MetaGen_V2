@@ -6,7 +6,7 @@ sap.ui.define([
 	"sap/m/Button",
 	"sap/m/Label",
 	"sap/m/ButtonType",
-	"sap/m/Menu",
+	"sap/m/Menu",     
 	"sap/m/MenuItem",
 	"./modules/checkOdataProject",
 	"./modules/generateProject",
