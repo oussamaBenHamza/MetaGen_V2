@@ -84,6 +84,7 @@ sap.ui.define([
 		onAfterRendering: function (oEvt) {
 			// this.byId("saveBt").addStyleClass("animation");
 			var that = this;
+			var me = this;
 
 			this.oPropertiesTable = this.getView().byId("table");
 
