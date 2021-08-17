@@ -6,7 +6,7 @@ sap.ui.define([
 	"sap/m/Button",
 	"sap/m/Label",
 	"sap/m/ButtonType",
-	"sap/m/Menu",     
+	"sap/m/Menu",
 	"sap/m/MenuItem",
 	"./modules/checkOdataProject",
 	"./modules/generateProject",
@@ -31,7 +31,7 @@ sap.ui.define([
 		associationModule: createAssociation,
 		generateProjectdModule: generateProject,
 		renderingModule: rendering,
-		test : rendering,
+		test: rendering,
 		onInit: function () {
 			this.fullScreen = true;
 			this.saveProject = saveProject;
@@ -55,7 +55,7 @@ sap.ui.define([
 			var oVisibleWizard = new sap.ui.model.json.JSONModel({
 				createEntities: false,
 				createAssociation: false,
-				createNavProps : false
+				createNavProps: false
 			});
 			this.getView().setModel(oVisibleWizard, "creationWizard");
 
@@ -89,7 +89,7 @@ sap.ui.define([
 
 			this.byId("Tree").attachBrowserEvent("dblclick", function (oEvent) {
 				var selectedItem = this.getSelectedItem();
-				upDateCurrentProject.upDateProjectOnDbClick.apply(that, [oEvent,selectedItem]);
+				upDateCurrentProject.upDateProjectOnDbClick.apply(that, [oEvent, selectedItem]);
 			});
 			this.byId("Tree").attachBrowserEvent("contextmenu", function (oEvent) {
 				var selectedItem;
@@ -98,6 +98,7 @@ sap.ui.define([
 				aTreeItems.forEach(function (oItem) {
 					if (oItem.getProperty("title") === target) {
 						selectedItem = oItem;
+						var that = this;
 					}
 				});
 				this.setSelectedItem(selectedItem);
